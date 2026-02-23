@@ -1,0 +1,19 @@
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Dependencies
+vendor/
+
+# Environment
+.env
+
+# Logs
+*.log
+
+# Database
+*.sql.backup
