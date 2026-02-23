@@ -6,10 +6,10 @@
  */
 
 // Database credentials
-define('DB_HOST', 'db');
-define('DB_NAME', 'asio_db');
-define('DB_USER', 'asio_user');
-define('DB_PASS', 'asio_pass');
+define('DB_HOST', getenv('MYSQL_HOST') ?: 'db');
+define('DB_NAME', getenv('MYSQL_DATABASE') ?: 'asio_db');
+define('DB_USER', getenv('MYSQL_USER') ?: 'asio_user');
+define('DB_PASS', getenv('MYSQL_PASSWORD') ?: 'asio_pass');
 define('DB_CHARSET', 'utf8mb4');
 
 // Create connection
