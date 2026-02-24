@@ -1,9 +1,13 @@
 <?php
 /**
  * Database Configuration
- * 
+ *
  * Connection settings for MySQL database
  */
+
+// Tell mysqli to throw exceptions on errors
+// This allows try/catch blocks in models to handle DB failures cleanly
+mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 
 // Database credentials
 define('DB_HOST', getenv('MYSQL_HOST') ?: 'db');

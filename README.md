@@ -59,7 +59,7 @@ docker-compose up --build
 ### 3. Open in browser
 
 | Service     | URL                   |
-|-------------|-----------------------|
+| ----------- | --------------------- |
 | Application | http://localhost:8080 |
 | phpMyAdmin  | http://localhost:8081 |
 
@@ -70,6 +70,7 @@ docker-compose down
 ```
 
 > To also delete all database data (full reset):
+>
 > ```bash
 > docker-compose down -v
 > ```
@@ -79,7 +80,7 @@ docker-compose down
 ## Database Access
 
 | Setting  | Value     |
-|----------|-----------|
+| -------- | --------- |
 | Host     | localhost |
 | Port     | 3306      |
 | Database | asio_db   |
@@ -134,17 +135,38 @@ docker exec asio_db mysql --default-character-set=utf8mb4 -u asio_user -pasio_pa
 
 - [x] Fetch spaces from DB and render dynamically on home page
 - [x] utf8mb4 connection — Finnish characters display correctly
+- [x] DB schema refactored to Option 3 (base + extension tables)
+  - `users` — shared login fields for all user types
+  - `private_profiles` — extends users for private persons
+  - `company_profiles` — extends users for companies (Y-tunnus, billing etc.)
+  - `bookings` — references `users.id` cleanly regardless of type
 - [ ] Space model class (src/models/Space.php)
 - [ ] Space controller class (src/controllers/SpaceController.php)
 - [ ] Space detail page
 - [ ] Backend filtering by space type
 
-### Phase 4: User Authentication ❌
+### Phase 4: User Authentication 🔄
 
-- [ ] User model (src/models/User.php)
-- [ ] Auth controller (src/controllers/AuthController.php)
-- [ ] Registration form (Rekisteröidy)
-- [ ] Login form (Kirjaudu sisään)
+- [x] User model (src/models/User.php)
+  - `findByEmail()` — duplicate check before registration
+  - `createPrivateUser()` — transaction: users + private_profiles
+  - `createCompanyUser()` — transaction: users + company_profiles
+- [x] Auth controller (src/controllers/AuthController.php)
+  - Input validation with Finnish error messages
+  - `password_hash()` with PASSWORD_BCRYPT — plain text never stored
+  - Duplicate email detection
+  - Returns result array — no HTML output
+- [x] Registration page (src/register.php)
+  - [x] Shared header from home page
+  - [x] Toggle between private person / company form
+  - [x] Private fields: first name, last name, email, phone, password
+  - [x] Company fields: company name, Y-tunnus, contact person, billing address, email, phone, password
+  - [x] Privacy notice checkbox (required)
+  - [x] Submit button: Lähetä rekisteröitymislomake
+  - [x] Loading indicator on submit
+  - [x] Success / error alert with auto-dismiss (6s) and close button
+  - [x] Form hidden on success — prevents double-submit
+- [ ] Login page (Kirjaudu sisään)
 - [ ] Session management
 
 ### Phase 5: Booking System ❌
@@ -181,6 +203,18 @@ docker exec asio_db mysql --default-character-set=utf8mb4 -u asio_user -pasio_pa
 4. As a user, I want to see a service provider info box in the sidebar
 5. As a user, I want to see a 2×2 grid of clickable space cards with images
 6. As a user, I want a footer with a company logo that appears on scroll
+
+### Registration Page — Phase 4 ✅
+
+1. As a user, clicking 'Rekisteröidy' on the home page redirects me to the register page
+2. As a user, the register page shows the same header as the home page
+3. As a user, I can choose between registering as a private person or a company
+4. As a user, the form fields change depending on my selection:
+   - **Private:** first name, last name, email, phone, password
+   - **Company:** company name, Y-tunnus, contact person, billing address, email, phone, password
+5. As a user, I must check a privacy notice checkbox before I can submit
+6. As a user, after pressing 'Lähetä rekisteröitymislomake' I see an alert confirming success or describing the error
+7. As a user, while the form is submitting I see a loading indicator
 
 ### Backend (Planned)
 

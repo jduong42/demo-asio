@@ -34,7 +34,7 @@ if ($spaces_result && $spaces_result->num_rows > 0) {
                 <div class="logo" role="img" aria-label="ASIO logo">ASIO</div>
             </div>
             <div class="header-right">
-                <button class="btn btn-secondary" onclick="alert('Create User - Coming Soon')" aria-label="Create new user account">
+                <button class="btn btn-secondary" onclick="window.location.href='register.php'" aria-label="Create new user account">
                     <span aria-hidden="true">👤</span> Rekisteröidy
                 </button>
                 <button class="btn btn-secondary" onclick="alert('Login - Coming Soon')" aria-label="Log in to your account">
